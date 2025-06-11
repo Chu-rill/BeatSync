@@ -1,6 +1,7 @@
 import axios from "axios";
 import { URLSearchParams } from "url";
 import dotenv from "dotenv";
+import { UserRepository } from "../repository/user.repository";
 dotenv.config();
 
 export class GoogleAuthService {
@@ -9,6 +10,7 @@ export class GoogleAuthService {
     this.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
     this.redirectUri = process.env.GOOGLE_REDIRECT_URI;
     this.frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+    this.userRespository = UserRepository;
 
     // Google OAuth endpoints
     this.authUrl = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -97,14 +99,22 @@ export class GoogleAuthService {
         },
       });
 
+      let user = this.userRespository.findUserByEmail(response.data.email);
+      if (!user) {
+        user = await this.userRespository.createUser({
+          email: response.data.email,
+          username: response.data.name,
+        });
+      }
+
       return {
         id: response.data.id,
         email: response.data.email,
-        name: response.data.name,
-        given_name: response.data.given_name,
-        family_name: response.data.family_name,
-        picture: response.data.picture,
-        verified_email: response.data.verified_email,
+        username: response.data.name,
+        // given_name: response.data.given_name,
+        // family_name: response.data.family_name,
+        // picture: response.data.picture,
+        // verified_email: response.data.verified_email,
       };
     } catch (error) {
       console.error(

@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false, // Optional for OAuth users
     min: 4,
     unique: true,
   },
