@@ -23,6 +23,6 @@ authRoutes.post("/google/logout", googleAuthController.logout);
 
 //BASIC AUTH ROUTES
 authRoutes.post("/basic/signup", authController.signup);
-authRoutes.post("/basic/login", authController.loginUser);
+authRoutes.post("/basic/login", authController.login);
 
 export default authRoutes;

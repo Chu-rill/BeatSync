@@ -1,6 +1,7 @@
 import axios from "axios";
 import { URLSearchParams } from "url";
-import { UserRepository } from "../repository/user.repository";
+import { UserRepository } from "../repository/user.repository.js";
+import { EmailService } from "../utils/email.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,6 +12,7 @@ export class GoogleAuthService {
     this.redirectUri = process.env.GOOGLE_REDIRECT_URI;
     this.frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
     this.userRespository = new UserRepository();
+    this.emailService = new EmailService();
 
     // Google OAuth endpoints
     this.authUrl = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -100,11 +102,19 @@ export class GoogleAuthService {
       });
 
       let user = this.userRespository.findUserByEmail(response.data.email);
+      console.log("userGoogle:", user);
       if (!user) {
         user = await this.userRespository.createUser({
           email: response.data.email,
           username: response.data.name,
         });
+        console.log("user:", user);
+        const data = {
+          subject: "BeatSync Inviation",
+          username: user.username,
+        };
+
+        await this.emailService.sendEmailWithTemplate(user.email, data);
       }
 
       return {
