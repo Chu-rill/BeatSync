@@ -1,7 +1,7 @@
 import axios from "axios";
 import { URLSearchParams } from "url";
-import dotenv from "dotenv";
 import { UserRepository } from "../repository/user.repository";
+import dotenv from "dotenv";
 dotenv.config();
 
 export class GoogleAuthService {
@@ -10,7 +10,7 @@ export class GoogleAuthService {
     this.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
     this.redirectUri = process.env.GOOGLE_REDIRECT_URI;
     this.frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-    this.userRespository = UserRepository;
+    this.userRespository = new UserRepository();
 
     // Google OAuth endpoints
     this.authUrl = "https://accounts.google.com/o/oauth2/v2/auth";
