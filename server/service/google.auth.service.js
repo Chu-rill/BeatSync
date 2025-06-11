@@ -1,5 +1,7 @@
 import axios from "axios";
 import { URLSearchParams } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
 export class GoogleAuthService {
   constructor() {

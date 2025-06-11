@@ -1,4 +1,4 @@
-import { GoogleAuthService } from "../service/google.auth.service";
+import { GoogleAuthService } from "../service/google.auth.service.js";
 
 export class GoogleAuthController {
   constructor() {
@@ -46,7 +46,13 @@ export class GoogleAuthController {
         user: userInfo,
       });
 
-      res.redirect(redirectUrl);
+      // res.redirect(redirectUrl);
+      res.json({
+        message: "Authentication successful",
+        redirectUrl,
+        user: userInfo,
+        tokens: tokenData,
+      });
     } catch (error) {
       console.error("Google callback error:", error);
       const errorUrl = `${this.googleAuthService.frontendUrl}/auth/error?error=authentication_failed`;
