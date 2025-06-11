@@ -1,6 +1,6 @@
 import { SpotifyAuthService } from "../service/spotify.auth.service.js";
 
-export class AuthController {
+export class SpotifyAuthController {
   constructor() {
     this.spotifyAuthService = new SpotifyAuthService();
   }
