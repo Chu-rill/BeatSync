@@ -1,9 +1,12 @@
 import { UserRepository } from "../repository/user.repository.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { EmailService } from "../utils/email.js";
 
 export class UserService {
   constructor() {
     this.userRepository = new UserRepository();
+    this.emailService = new EmailService();
   }
 
   async createUser(userData) {
@@ -33,6 +36,16 @@ export class UserService {
         password: hashedPassword,
       });
 
+      if (!user) {
+        throw new Error("User creation failed");
+      }
+
+      const data = {
+        subject: "BeatSync Inviation",
+        username: user.username,
+      };
+      await this.emailService.sendEmailWithTemplate(user.email, data);
+
       // Return user without password
       const { password, ...userWithoutPassword } = user.toObject();
       return userWithoutPassword;
@@ -53,10 +66,24 @@ export class UserService {
         throw new Error("Invalid email or password");
       }
 
-      // Return user without password
+      // Generate JWT token
+      const token = jwt.sign(
+        {
+          userId: user._id,
+          email: user.email,
+          username: user.username,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" }
+      );
+
+      // Return user without password and include token
       const { password: userPassword, ...userWithoutPassword } =
         user.toObject();
-      return userWithoutPassword;
+      return {
+        ...userWithoutPassword,
+        token,
+      };
     } catch (error) {
       throw new Error(`Error in login service: ${error.message}`);
     }

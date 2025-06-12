@@ -1,36 +1,35 @@
-import React from 'react';
-import { Music, Youtube, TrendingUp, Clock } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { ServiceConnections } from '../components/dashboard/ServiceConnections';
+import { Music, Youtube, TrendingUp, Clock } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { ServiceConnections } from "../components/dashboard/ServiceConnections";
 
 export const DashboardPage = () => {
   const { user } = useAuth();
 
   const stats = [
     {
-      name: 'Playlists Synced',
-      value: '12',
+      name: "Playlists Synced",
+      value: "12",
       icon: Music,
-      color: 'text-spotify-green bg-green-50 dark:bg-green-900/20'
+      color: "text-spotify-green bg-green-50 dark:bg-green-900/20",
     },
     {
-      name: 'Total Tracks',
-      value: '1,247',
+      name: "Total Tracks",
+      value: "1,247",
       icon: TrendingUp,
-      color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/20'
+      color: "text-blue-600 bg-blue-50 dark:bg-blue-900/20",
     },
     {
-      name: 'YouTube Playlists',
-      value: '8',
+      name: "YouTube Playlists",
+      value: "8",
       icon: Youtube,
-      color: 'text-red-500 bg-red-50 dark:bg-red-900/20'
+      color: "text-red-500 bg-red-50 dark:bg-red-900/20",
     },
     {
-      name: 'Last Sync',
-      value: '2h ago',
+      name: "Last Sync",
+      value: "2h ago",
       icon: Clock,
-      color: 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'
-    }
+      color: "text-purple-600 bg-purple-50 dark:bg-purple-900/20",
+    },
   ];
 
   return (
@@ -85,25 +84,34 @@ export const DashboardPage = () => {
                 {[
                   {
                     action: 'Synced playlist "Chill Vibes"',
-                    time: '2 hours ago',
-                    status: 'success'
+                    time: "2 hours ago",
+                    status: "success",
                   },
                   {
                     action: 'Created YouTube playlist "Workout Mix"',
-                    time: '1 day ago',
-                    status: 'success'
+                    time: "1 day ago",
+                    status: "success",
                   },
                   {
-                    action: 'Failed to sync "Rock Classics" - 3 tracks unavailable',
-                    time: '2 days ago',
-                    status: 'warning'
-                  }
+                    action:
+                      'Failed to sync "Rock Classics" - 3 tracks unavailable',
+                    time: "2 days ago",
+                    status: "warning",
+                  },
                 ].map((activity, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-                    <div className={`w-2 h-2 rounded-full ${
-                      activity.status === 'success' ? 'bg-green-500' :
-                      activity.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
-                    }`} />
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700"
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        activity.status === "success"
+                          ? "bg-green-500"
+                          : activity.status === "warning"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                      }`}
+                    />
                     <div className="flex-1">
                       <p className="text-sm text-gray-900 dark:text-white">
                         {activity.action}
@@ -138,14 +146,16 @@ export const DashboardPage = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             <ServiceConnections />
-            
+
             {/* Tips */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
               <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
                 💡 Pro Tips
               </h3>
               <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
-                <li>• Sync playlists during off-peak hours for better performance</li>
+                <li>
+                  • Sync playlists during off-peak hours for better performance
+                </li>
                 <li>• Check for unavailable tracks before syncing</li>
                 <li>• Keep playlist names under 100 characters</li>
               </ul>

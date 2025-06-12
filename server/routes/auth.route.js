@@ -22,7 +22,7 @@ authRoutes.post("/google/refresh", googleAuthController.refreshToken);
 authRoutes.post("/google/logout", googleAuthController.logout);
 
 //BASIC AUTH ROUTES
-authRoutes.post("/basic/signup", authController.signup);
-authRoutes.post("/basic/login", authController.login);
+authRoutes.post("/signup", authController.signup);
+authRoutes.post("/login", authController.login);
 
 export default authRoutes;

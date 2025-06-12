@@ -7,6 +7,10 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { LandingPage } from "./pages/LandingPage";
 import { AuthPage } from "./pages/AuthPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { PlaylistsPage } from "./pages/PlaylistsPage";
+import { SyncPage } from "./pages/SyncPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 function App() {
   return (
@@ -30,16 +34,7 @@ function App() {
                 path="/playlists"
                 element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-                      <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                          Playlists Page
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                          Coming soon - Spotify playlist management
-                        </p>
-                      </div>
-                    </div>
+                    <PlaylistsPage />
                   </ProtectedRoute>
                 }
               />
@@ -47,16 +42,7 @@ function App() {
                 path="/sync"
                 element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-                      <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                          Sync Page
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                          Coming soon - Playlist synchronization tools
-                        </p>
-                      </div>
-                    </div>
+                    <SyncPage />
                   </ProtectedRoute>
                 }
               />
@@ -64,16 +50,7 @@ function App() {
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-                      <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                          Profile Page
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                          Coming soon - User profile management
-                        </p>
-                      </div>
-                    </div>
+                    <ProfilePage />
                   </ProtectedRoute>
                 }
               />
@@ -81,16 +58,7 @@ function App() {
                 path="/settings"
                 element={
                   <ProtectedRoute>
-                    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-                      <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                          Settings Page
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                          Coming soon - Application settings
-                        </p>
-                      </div>
-                    </div>
+                    <SettingsPage />
                   </ProtectedRoute>
                 }
               />
