@@ -110,7 +110,7 @@ export class GoogleAuthService {
           email: response.data.email,
           username: response.data.name,
         });
-        console.log("user:", user);
+        // console.log("user:", user);
         const data = {
           subject: "BeatSync Inviation",
           username: user.username,
