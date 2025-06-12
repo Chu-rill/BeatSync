@@ -3,53 +3,178 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome to BeatSync</title>
-    <style>
-      body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333;
-      max-width: 600px; margin: 0 auto; padding: 20px; } .header { text-align:
-      center; padding: 20px 0; background: #1DB954; color: white; border-radius:
-      8px; margin-bottom: 20px; } .content { background: #fff; padding: 20px;
-      border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); } .button {
-      display: inline-block; padding: 12px 24px; background: #1DB954; color:
-      white; text-decoration: none; border-radius: 25px; margin: 20px 0; }
-      .footer { text-align: center; padding: 20px; color: #666; font-size:
-      0.9em; }
-    </style>
   </head>
-  <body>
-    <div class="header">
-      <h1>Welcome to BeatSync!</h1>
-    </div>
+  <body
+    style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4;"
+  >
 
-    <div class="content">
-      <h2>Hello {{username}},</h2>
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: #f4f4f4; padding: 20px;"
+    >
+      <tr>
+        <td align="center">
 
-      <p>Welcome to BeatSync - your ultimate music synchronization platform!
-        We're thrilled to have you join our community of music enthusiasts.</p>
+          <!-- Main Container -->
+          <table
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"
+          >
 
-      <p>With BeatSync, you can:</p>
-      <ul>
-        <li>Sync your music across different platforms</li>
-        <li>Create and share playlists</li>
-        <li>Discover new music</li>
-        <li>Connect with other music lovers</li>
-      </ul>
+            <!-- Header -->
+            <tr>
+              <td
+                style="background-color: #1DB954; color: white; text-align: center; padding: 40px 20px;"
+              >
+                <h1
+                  style="margin: 0; font-size: 36px; font-weight: bold;"
+                >BeatSync</h1>
+                <p
+                  style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;"
+                >Your Ultimate Music Synchronization Platform</p>
+              </td>
+            </tr>
 
-      <p>Ready to start your musical journey?</p>
+            <!-- Content -->
+            <tr>
+              <td style="padding: 40px 30px;">
 
-      {{!-- <center>
-            <a href="{{verificationLink}}" class="button">Get Started</a>
-        </center> --}}
+                <h2
+                  style="color: #2c3e50; font-size: 24px; margin: 0 0 20px 0;"
+                >Hello {{username}}! 👋</h2>
 
-      <p>If you have any questions or need assistance, our support team is
-        always here to help.</p>
+                <div
+                  style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #1DB954; margin: 20px 0;"
+                >
+                  <p style="margin: 0; font-size: 16px; color: #34495e;">
+                    🎉 Welcome to BeatSync - where music meets technology! We're
+                    absolutely thrilled to have you join our vibrant community
+                    of music enthusiasts.
+                  </p>
+                </div>
 
-      <p>Happy Syncing!</p>
-      <p>The BeatSync Team</p>
-    </div>
+                <h3
+                  style="color: #1DB954; font-size: 20px; margin: 30px 0 20px 0; text-align: center;"
+                >🚀 What awaits you with BeatSync:</h3>
 
-    <div class="footer">
-      <p>© 2025 BeatSync. All rights reserved.</p>
-      <p>If you didn't create this account, please ignore this email.</p>
-    </div>
+                <!-- Features Table -->
+                <table
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="margin: 20px 0;"
+                >
+                  <tr>
+                    <td
+                      style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #1DB954;"
+                    >
+                      <span
+                        style="font-size: 18px; margin-right: 10px;"
+                      >🔄</span>
+                      <span style="color: #2c3e50; font-weight: 500;">Seamlessly
+                        sync your music across all platforms</span>
+                    </td>
+                  </tr>
+                  <tr><td style="height: 10px;"></td></tr>
+                  <tr>
+                    <td
+                      style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #1DB954;"
+                    >
+                      <span
+                        style="font-size: 18px; margin-right: 10px;"
+                      >🎵</span>
+                      <span style="color: #2c3e50; font-weight: 500;">Create and
+                        share amazing playlists</span>
+                    </td>
+                  </tr>
+                  <tr><td style="height: 10px;"></td></tr>
+                  <tr>
+                    <td
+                      style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #1DB954;"
+                    >
+                      <span
+                        style="font-size: 18px; margin-right: 10px;"
+                      >✨</span>
+                      <span style="color: #2c3e50; font-weight: 500;">Discover
+                        new music tailored to your taste</span>
+                    </td>
+                  </tr>
+                  <tr><td style="height: 10px;"></td></tr>
+                  <tr>
+                    <td
+                      style="padding: 15px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #1DB954;"
+                    >
+                      <span
+                        style="font-size: 18px; margin-right: 10px;"
+                      >🤝</span>
+                      <span style="color: #2c3e50; font-weight: 500;">Connect
+                        with fellow music lovers worldwide</span>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- CTA Section -->
+                <div
+                  style="text-align: center; margin: 30px 0; padding: 25px; background-color: #667eea; border-radius: 8px;"
+                >
+                  <p
+                    style="color: white; font-size: 18px; margin: 0 0 20px 0; font-weight: 500;"
+                  >Ready to revolutionize your music experience?</p>
+                  {{!-- <a
+                    href="{{verificationLink}}"
+                    style="display: inline-block; padding: 12px 30px; background-color: #1DB954; color: white; text-decoration: none; border-radius: 25px; font-size: 16px; font-weight: bold;"
+                  >START YOUR JOURNEY</a> --}}
+                </div>
+
+                <!-- Support Text -->
+                <div
+                  style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;"
+                >
+                  <p style="margin: 0; color: #7f8c8d; font-style: italic;">
+                    💝 Questions? Need assistance? Our dedicated support team is
+                    here 24/7 to help you make the most of your BeatSync
+                    experience!
+                  </p>
+                </div>
+
+                <!-- Signature -->
+                <div
+                  style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ecf0f1;"
+                >
+                  <p style="margin: 0; font-size: 16px;">Happy Syncing! 🎶</p>
+                  <p
+                    style="margin: 5px 0 0 0; font-weight: bold; color: #1DB954; font-size: 16px;"
+                  >The BeatSync Team</p>
+                </div>
+
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style="background-color: #2c3e50; color: #bdc3c7; text-align: center; padding: 25px 20px; font-size: 14px;"
+              >
+                <p style="margin: 0 0 5px 0;">© 2025
+                  <span
+                    style="color: #1DB954; font-weight: bold;"
+                  >BeatSync</span>. All rights reserved.</p>
+                <p style="margin: 5px 0;">Didn't create this account? Simply
+                  ignore this email - no action needed.</p>
+                <p style="margin: 5px 0 0 0;">Made with ❤️ for music lovers
+                  everywhere</p>
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
   </body>
 </html>

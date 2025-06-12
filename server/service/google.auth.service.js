@@ -101,8 +101,10 @@ export class GoogleAuthService {
         },
       });
 
-      let user = this.userRespository.findUserByEmail(response.data.email);
-      console.log("userGoogle:", user);
+      let user = await this.userRespository.findUserByEmail(
+        response.data.email
+      );
+
       if (!user) {
         user = await this.userRespository.createUser({
           email: response.data.email,
