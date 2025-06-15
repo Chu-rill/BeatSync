@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SpotifyService } from './spotify.service';
+import { SpotifyService } from './spotify.auth.service';
 
 describe('SpotifyService', () => {
   let service: SpotifyService;
