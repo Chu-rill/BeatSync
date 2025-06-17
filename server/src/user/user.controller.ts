@@ -21,17 +21,17 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
-  async findOne(@Req() req: AuthRequest) {
-    const id = req.user.id;
-    return this.userService.getUser(id);
-  }
+  // @Get()
+  // async findOne(@Req() req: AuthRequest) {
+  //   const id = req.user.id;
+  //   return this.userService.getUser(id);
+  // }
 
-  @Delete()
-  async remove(@Req() req: AuthRequest) {
-    const userId = req.user.id;
-    return this.userService.remove(userId);
-  }
+  // @Delete()
+  // async remove(@Req() req: AuthRequest) {
+  //   const userId = req.user.id;
+  //   return this.userService.remove(userId);
+  // }
 
   // @Post('/profile')
   // @UseInterceptors(FileInterceptor('file'))
