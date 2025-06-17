@@ -10,14 +10,14 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
-} from "@nestjs/common";
-import { UserService } from "./user.service";
-import { AuthGuard } from "src/guard/auth.guard";
-import { AuthRequest } from "src/types/auth.request";
-import { FileInterceptor } from "@nestjs/platform-express";
+} from '@nestjs/common';
+import { UserService } from './user.service';
+import { AuthGuard } from 'src/guard/auth.guard';
+import { AuthRequest } from 'src/types/auth.request';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(AuthGuard)
-@Controller("users")
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
