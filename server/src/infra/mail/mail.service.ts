@@ -4,7 +4,6 @@ import * as fs from "fs/promises";
 import * as handlebars from "handlebars";
 import * as path from "path";
 import { ConfigService } from "@nestjs/config";
-import { last } from "rxjs";
 
 @Injectable()
 export class MailService {
@@ -28,10 +27,10 @@ export class MailService {
       process.cwd(),
       "src/views/welcome.hbs"
     );
-    this.welcomeOauthTemplatePath = path.join(
-      process.cwd(),
-      "src/views/welcome-oauth.hbs"
-    );
+    // this.welcomeOauthTemplatePath = path.join(
+    //   process.cwd(),
+    //   "src/views/welcome-oauth.hbs"
+    // );
   }
 
   // Method to read the email template file based on a path
