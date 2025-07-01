@@ -64,10 +64,10 @@ export class MailService {
     }
   }
 
-  // Send an email with a template
+  // Method to send an email with the welcome template
   async sendWelcomeEmail(
     email: string,
-    data: { subject: string; username: string; OTP: string }
+    data: { subject: string; username: string; }
   ): Promise<void> {
     try {
       const templateSource = await this.readTemplateFile(
@@ -80,10 +80,10 @@ export class MailService {
         to: email,
         subject: data.subject,
         html: emailTemplate({
-          PlatformName: "Recapify",
-          Username: data.username,
+          PlatformName: "BeatSync",
+          username: data.username,
           title: "Welcome Email",
-          OTP: data.OTP,
+         
         }),
       });
 
@@ -95,33 +95,5 @@ export class MailService {
     }
   }
 
-  //send an email with a template for OAuth
-  async sendOauthEmail(
-    email: string,
-    data: { subject: string; username: string }
-  ): Promise<void> {
-    try {
-      const templateSource = await this.readTemplateFile(
-        this.welcomeOauthTemplatePath
-      );
-      const emailTemplate = handlebars.compile(templateSource);
 
-      const info = await this.transporter.sendMail({
-        from: this.configService.get<string>("EMAIL_USER"),
-        to: email,
-        subject: data.subject,
-        html: emailTemplate({
-          PlatformName: "InnkeeperPro",
-          Username: data.username,
-          title: "Welcome Email",
-        }),
-      });
-
-      console.log(`Message sent: ${info.response}`);
-    } catch (error) {
-      console.error(
-        `Error sending email with template: ${error instanceof Error ? error.message : "Unknown error"}`
-      );
-    }
-  }
 }
