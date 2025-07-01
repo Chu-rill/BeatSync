@@ -3,16 +3,26 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import { Model } from 'mongoose';
-import { CreateSignupDto } from 'src/auth/email-and-password-auth/validation';
-import { UserResponse } from './user.response';
-import { encrypt } from 'src/utils/helper-functions/encryption';
+import {
+  CreateLoginDto,
+  CreateSignupDto,
+} from 'src/auth/email-and-password-auth/validation';
+import { LoginResponse, SignUpResponse } from './user.response';
+import {
+  comparePassword,
+  encrypt,
+} from 'src/utils/helper-functions/encryption';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private jwt: JwtService,
+  ) {}
 
-  async create(dto:CreateSignupDto): Promise<UserResponse> {
-     // Check if user already exists
+  async create(dto: CreateSignupDto): Promise<SignUpResponse> {
+    // Check if user already exists
     const existingUser = await this.findUnique({ email: dto.email });
     if (existingUser) {
       return {
@@ -22,19 +32,23 @@ export class UserService {
         data: null,
       };
     }
-    const hashedPassword = encrypt(dto.password); 
-    const newUser = new this.userModel({ name: dto.name, email: dto.email, password: hashedPassword });
+    const hashedPassword = encrypt(dto.password);
+    const newUser = new this.userModel({
+      name: dto.name,
+      email: dto.email,
+      password: hashedPassword,
+    });
     const user = await newUser.save();
     return {
-        success: true,
-        statusCode: HttpStatus.CREATED,
-        message: 'User signup successful',
-        data: {
-          id: (user as any)._id,
-          name: user.name,
-          email: user.email,
-        },
-      };
+      success: true,
+      statusCode: HttpStatus.CREATED,
+      message: 'User signup successful',
+      data: {
+        id: (user as any)._id,
+        name: user.name,
+        email: user.email,
+      },
+    };
   }
 
   async findAll(): Promise<User[]> {
@@ -49,7 +63,11 @@ export class UserService {
    * Find a user by a unique field (email, id, or name)
    * @param unique - An object with a unique field (e.g., { email })
    */
-  async findUnique(unique: { email?: string; _id?: string; name?: string }): Promise<User | null> {
+  async findUnique(unique: {
+    email?: string;
+    _id?: string;
+    name?: string;
+  }): Promise<User | null> {
     // If _id is provided, convert to ObjectId
     const query: any = { ...unique };
     if (query._id) {
@@ -66,14 +84,39 @@ export class UserService {
    * @param password - User's password (plain text)
    * @returns The user if credentials are valid, otherwise null
    */
-  async validateUser(email: string, password: string): Promise<User | null> {
-    const user = await this.userModel.findOne({ email }).exec();
-    if (!user) return null;
-    // TODO: Replace with proper password hashing check
-    // For now, compare plain text (not secure)
-    if (user.password === password) {
-      return user;
+  async login(dto: CreateLoginDto): Promise<LoginResponse> {
+    const user = await this.userModel.findOne({ email: dto.email }).exec();
+    if (!user)
+      return {
+        success: false,
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'User not found',
+        data: null,
+      };
+    const isPasswordValid = await comparePassword(dto.password, user.password);
+    if (!isPasswordValid) {
+      return {
+        success: false,
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: 'invalid password',
+        data: null,
+      };
     }
-    return null;
+    let { password: userPassword, ...userWithoutPassword } = user;
+    const payload = {
+      ...userWithoutPassword, // Spread the rest of the user properties
+    };
+    const token = await this.jwt.signAsync(payload);
+    return {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: 'Login successful',
+      data: {
+        id: (user as any)._id,
+        name: user.name,
+        email: user.email,
+      },
+      token: token,
+    };
   }
 }
