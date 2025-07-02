@@ -6,6 +6,8 @@ import {
   YouTubePlaylist,
   SyncStatus,
   ApiError,
+  SignUpResponse,
+  LoginResponse,
 } from "../types";
 
 const API_BASE_URL =
@@ -50,10 +52,7 @@ class ApiClient {
   }
 
   // Auth endpoints
-  async login(
-    email: string,
-    password: string
-  ): Promise<{ user: User; tokens: AuthTokens }> {
+  async login(email: string, password: string): Promise<LoginResponse> {
     return this.request("/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
@@ -64,7 +63,7 @@ class ApiClient {
     email: string,
     password: string,
     username: string
-  ): Promise<{ user: User; tokens: AuthTokens }> {
+  ): Promise<SignUpResponse> {
     return this.request("/auth/signup", {
       method: "POST",
       body: JSON.stringify({ email, password, username }),

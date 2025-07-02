@@ -5,13 +5,14 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { User, AuthTokens } from "../types";
+import { User } from "../types";
 import { authApi } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { getToken, storeToken } from "../utils/jwt";
 
 interface AuthContextType {
   user: User | null;
-  tokens: AuthTokens | null;
+  token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, username: string) => Promise<void>;
@@ -37,23 +38,18 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [tokens, setTokens] = useState<AuthTokens | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const storedTokens = localStorage.getItem("beatsync-tokens");
+      const storedTokens = getToken();
       if (storedTokens) {
         try {
-          const parsedTokens = JSON.parse(storedTokens);
-          if (parsedTokens.expiresAt > Date.now()) {
-            setTokens(parsedTokens);
-            const userData = await authApi.getProfile(parsedTokens.accessToken);
-            setUser(userData);
-          } else {
-            localStorage.removeItem("beatsync-tokens");
-          }
+          setToken(storedTokens);
+          const userData = await authApi.getProfile(storedTokens);
+          setUser(userData);
         } catch (error) {
           console.error("Failed to initialize auth:", error);
           localStorage.removeItem("beatsync-tokens");
@@ -67,9 +63,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     const response = await authApi.login(email, password);
-    setTokens(response.tokens);
-    setUser(response.user);
-    localStorage.setItem("beatsync-tokens", JSON.stringify(response.tokens));
+    setToken(response.token);
+    setUser(response.data);
+    storeToken(response.token);
   };
 
   const signup = async (email: string, password: string, username: string) => {
@@ -81,7 +77,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     setUser(null);
-    setTokens(null);
+    setToken(null);
     localStorage.removeItem("beatsync-tokens");
   };
 
@@ -98,10 +94,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const disconnectService = async (service: "spotify" | "google") => {
-    if (!tokens) return;
+    if (!token) return;
 
-    await authApi.disconnectService(service, tokens.accessToken);
-    const updatedUser = await authApi.getProfile(tokens.accessToken);
+    await authApi.disconnectService(service, token);
+    const updatedUser = await authApi.getProfile(token);
     setUser(updatedUser);
   };
 
@@ -109,7 +105,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         user,
-        tokens,
+        token,
         loading,
         login,
         signup,

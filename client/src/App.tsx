@@ -15,8 +15,8 @@ import { SettingsPage } from "./pages/SettingsPage";
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
             <Navbar />
             <Routes>
@@ -64,8 +64,8 @@ function App() {
               />
             </Routes>
           </div>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
       <Analytics />
     </ThemeProvider>
   );

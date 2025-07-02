@@ -13,12 +13,14 @@ import {
   encrypt,
 } from 'src/utils/helper-functions/encryption';
 import { JwtService } from '@nestjs/jwt';
+import { MailService } from 'src/infra/mail/mail.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwt: JwtService,
+    private mailService: MailService,
   ) {}
 
   async create(dto: CreateSignupDto): Promise<SignUpResponse> {
@@ -39,6 +41,15 @@ export class UserService {
       password: hashedPassword,
     });
     const user = await newUser.save();
+    try {
+      const data = {
+        subject: 'BeatSync Inviation',
+        username: user.name,
+      };
+      await this.mailService.sendWelcomeEmail(user.email, data);
+    } catch (error) {
+      console.log('Failed to send welcome email:', error);
+    }
     return {
       success: true,
       statusCode: HttpStatus.CREATED,
@@ -92,6 +103,7 @@ export class UserService {
         statusCode: HttpStatus.NOT_FOUND,
         message: 'User not found',
         data: null,
+        token: '',
       };
     const isPasswordValid = await comparePassword(dto.password, user.password);
     if (!isPasswordValid) {
@@ -100,6 +112,7 @@ export class UserService {
         statusCode: HttpStatus.UNAUTHORIZED,
         message: 'invalid password',
         data: null,
+        token: '',
       };
     }
     let { password: userPassword, ...userWithoutPassword } = user;

@@ -1,14 +1,28 @@
 export interface User {
-  id: string;
-  email: string;
-  username: string;
-  createdAt: string;
-  connectedServices: {
+  id?: string;
+  name?: string;
+  email?: string;
+  createdAt?: string;
+  connectedServices?: {
     spotify: boolean;
     google: boolean;
   };
 }
 
+export interface SignUpResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: User | null;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: User | null;
+  token: string;
+}
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -48,7 +62,7 @@ export interface SyncStatus {
   id: string;
   spotifyPlaylistId: string;
   youtubePlaylistId?: string;
-  status: 'pending' | 'syncing' | 'completed' | 'failed';
+  status: "pending" | "syncing" | "completed" | "failed";
   progress: number;
   totalTracks: number;
   syncedTracks: number;
