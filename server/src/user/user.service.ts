@@ -59,6 +59,7 @@ export class UserService {
         id: user.id, // Now using virtual id instead of _id
         name: user.name,
         email: user.email,
+        connectedServices: user.connectedServices,
       },
     };
   }
@@ -100,6 +101,7 @@ export class UserService {
         name: user.name,
         email: user.email,
         createdAt: user.createdAt?.toISOString(),
+        connectedServices: user.connectedServices,
       },
     };
   }
@@ -162,8 +164,94 @@ export class UserService {
         id: user.id, // Now using virtual id instead of _id
         name: user.name,
         email: user.email,
+        connectedServices: user.connectedServices,
       },
       token: token,
+    };
+  }
+
+  /**
+   * Update user's connected services
+   * @param userId - User's ID
+   * @param service - Service name (spotify or google)
+   * @param connected - Connection status
+   */
+  async updateConnectedService(
+    userId: string,
+    service: 'spotify' | 'google',
+    connected: boolean,
+  ): Promise<UserResponse> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mongoose = require('mongoose');
+    const objectId = new mongoose.Types.ObjectId(userId);
+
+    const updateQuery = {};
+    updateQuery[`connectedServices.${service}`] = connected;
+
+    const user = await this.userModel
+      .findByIdAndUpdate(
+        objectId,
+        { $set: updateQuery },
+        { new: true, runValidators: true },
+      )
+      .exec();
+
+    if (!user) {
+      return {
+        success: false,
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'User not found',
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: `${service} connection updated successfully`,
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt?.toISOString(),
+        connectedServices: user.connectedServices,
+      },
+    };
+  }
+
+  /**
+   * Get user's connected services
+   * @param userId - User's ID
+   */
+  async getConnectedServices(userId: string): Promise<{
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: { spotify: boolean; google: boolean } | null;
+  }> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mongoose = require('mongoose');
+    const objectId = new mongoose.Types.ObjectId(userId);
+
+    const user = await this.userModel
+      .findById(objectId)
+      .select('connectedServices')
+      .exec();
+
+    if (!user) {
+      return {
+        success: false,
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'User not found',
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: 'Connected services retrieved successfully',
+      data: user.connectedServices,
     };
   }
 }

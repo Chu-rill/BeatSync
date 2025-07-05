@@ -3,7 +3,12 @@ export interface User {
   name?: string;
   email?: string;
   createdAt?: string;
+  connectedServices?: {
+    spotify: boolean;
+    google: boolean;
+  };
 }
+
 export interface UserResponse {
   success: boolean;
   statusCode: number;

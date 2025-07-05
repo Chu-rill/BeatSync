@@ -27,6 +27,18 @@ export class User {
   @Prop({ required: false })
   password: string;
 
+  @Prop({
+    type: {
+      spotify: { type: Boolean, default: false },
+      google: { type: Boolean, default: false },
+    },
+    default: () => ({ spotify: false, google: false }),
+  })
+  connectedServices: {
+    spotify: boolean;
+    google: boolean;
+  };
+
   // These fields are automatically added by Mongoose with timestamps: true
   createdAt?: Date;
   updatedAt?: Date;

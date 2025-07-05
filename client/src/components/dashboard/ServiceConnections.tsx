@@ -1,31 +1,31 @@
-import React from 'react';
-import { Music, Youtube, Check, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import React from "react";
+import { Music, Youtube, Check, AlertCircle } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const ServiceConnections = () => {
   const { user, connectSpotify, connectGoogle, disconnectService } = useAuth();
 
   const services = [
     {
-      name: 'Spotify',
+      name: "Spotify",
       icon: Music,
-      connected: user?.connectedServices.spotify || false,
-      color: 'text-spotify-green',
-      bgColor: 'bg-green-50 dark:bg-green-900/20',
-      borderColor: 'border-green-200 dark:border-green-800',
+      connected: user?.connectedServices?.spotify || false,
+      color: "text-spotify-green",
+      bgColor: "bg-green-50 dark:bg-green-900/20",
+      borderColor: "border-green-200 dark:border-green-800",
       connectAction: connectSpotify,
-      disconnectAction: () => disconnectService('spotify')
+      disconnectAction: () => disconnectService("spotify"),
     },
     {
-      name: 'YouTube',
+      name: "YouTube",
       icon: Youtube,
-      connected: user?.connectedServices.google || false,
-      color: 'text-red-500',
-      bgColor: 'bg-red-50 dark:bg-red-900/20',
-      borderColor: 'border-red-200 dark:border-red-800',
+      connected: user?.connectedServices?.google || false,
+      color: "text-red-500",
+      bgColor: "bg-red-50 dark:bg-red-900/20",
+      borderColor: "border-red-200 dark:border-red-800",
       connectAction: connectGoogle,
-      disconnectAction: () => disconnectService('google')
-    }
+      disconnectAction: () => disconnectService("google"),
+    },
   ];
 
   return (
@@ -33,11 +33,11 @@ export const ServiceConnections = () => {
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
         Connected Services
       </h3>
-      
+
       <div className="space-y-4">
         {services.map((service) => {
           const Icon = service.icon;
-          
+
           return (
             <div
               key={service.name}
@@ -45,7 +45,9 @@ export const ServiceConnections = () => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-lg bg-white dark:bg-gray-700 ${service.color}`}>
+                  <div
+                    className={`p-2 rounded-lg bg-white dark:bg-gray-700 ${service.color}`}
+                  >
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>
@@ -53,11 +55,11 @@ export const ServiceConnections = () => {
                       {service.name}
                     </h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {service.connected ? 'Connected' : 'Not connected'}
+                      {service.connected ? "Connected" : "Not connected"}
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {service.connected ? (
                     <>
@@ -89,7 +91,7 @@ export const ServiceConnections = () => {
           );
         })}
       </div>
-      
+
       <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
         <p className="text-sm text-blue-700 dark:text-blue-300">
           💡 Connect both services to sync your Spotify playlists to YouTube
