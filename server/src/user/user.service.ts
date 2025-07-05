@@ -35,7 +35,7 @@ export class UserService {
         data: null,
       };
     }
-    const hashedPassword = encrypt(dto.password);
+    const hashedPassword = await encrypt(dto.password);
     const newUser = new this.userModel({
       name: dto.name,
       email: dto.email,

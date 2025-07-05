@@ -16,6 +16,10 @@ export class AuthController {
   @Post('/login')
   @UsePipes(new ZodPipe(login))
   async login(@Body() dto: CreateLoginDto) {
+    console.log({
+      email: dto.email,
+      password: dto.password,
+    });
     return this.userService.login(dto);
   }
 }
