@@ -25,7 +25,7 @@ export class OauthService {
       picture: req.user.picture,
     };
 
-    let user = await this.userService.findUnique(auth.email);
+    let user = await this.userService.findUnique({ email: auth.email });
     const dto: CreateSignupOauthDto = {
       name: auth.firstName + ' ' + auth.lastName,
       email: auth.email,

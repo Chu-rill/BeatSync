@@ -56,14 +56,14 @@ export class UserService {
       statusCode: HttpStatus.CREATED,
       message: 'User signup successful',
       data: {
-        id: (user as any)._id,
+        id: user.id, // Now using virtual id instead of _id
         name: user.name,
         email: user.email,
       },
     };
   }
 
-  async createOauth(dto: CreateSignupOauthDto): Promise<User> {
+  async createOauth(dto: CreateSignupOauthDto): Promise<UserDocument> {
     const newUser = new this.userModel({
       name: dto.name,
       email: dto.email,
@@ -79,10 +79,6 @@ export class UserService {
   }
 
   /**
-   * Find a user by a unique field (email, id, or username)
-   * @param unique - An object with a unique field (e.g., { email })
-   */
-  /**
    * Find a user by a unique field (email, id, or name)
    * @param unique - An object with a unique field (e.g., { email })
    */
@@ -90,7 +86,7 @@ export class UserService {
     email?: string;
     _id?: string;
     name?: string;
-  }): Promise<User | null> {
+  }): Promise<UserDocument | null> {
     // If _id is provided, convert to ObjectId
     const query: any = { ...unique };
     if (query._id) {
@@ -127,7 +123,7 @@ export class UserService {
         token: '',
       };
     }
-    let { password: userPassword, ...userWithoutPassword } = user;
+    let { password: userPassword, ...userWithoutPassword } = user.toObject();
     const payload = {
       ...userWithoutPassword, // Spread the rest of the user properties
     };
@@ -137,7 +133,7 @@ export class UserService {
       statusCode: HttpStatus.OK,
       message: 'Login successful',
       data: {
-        id: (user as any)._id,
+        id: user.id, // Now using virtual id instead of _id
         name: user.name,
         email: user.email,
       },

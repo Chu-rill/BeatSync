@@ -15,6 +15,7 @@ export type UserDocument = User & Document;
       return ret;
     },
   },
+  toObject: { virtuals: true },
 })
 export class User {
   @Prop({ required: true })
@@ -26,6 +27,7 @@ export class User {
   @Prop({ required: false })
   password: string;
 
+  // These fields are automatically added by Mongoose with timestamps: true
   createdAt?: Date;
   updatedAt?: Date;
 }
