@@ -3,7 +3,19 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema({ timestamps: true }) // Enable createdAt and updatedAt
+@Schema({
+  timestamps: true,
+  // Enable virtual fields in JSON output
+  toJSON: {
+    virtuals: true,
+    transform: function (doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    },
+  },
+})
 export class User {
   @Prop({ required: true })
   name: string;
@@ -14,7 +26,6 @@ export class User {
   @Prop({ required: false })
   password: string;
 
-  // These fields are automatically added by Mongoose with timestamps: true
   createdAt?: Date;
   updatedAt?: Date;
 }

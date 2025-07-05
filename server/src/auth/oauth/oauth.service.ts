@@ -2,6 +2,7 @@ import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/infra/mail/mail.service';
 import { UserService } from 'src/user/user.service';
+import { CreateSignupOauthDto } from '../email-and-password-auth/validation';
 
 @Injectable()
 export class OauthService {
@@ -25,24 +26,22 @@ export class OauthService {
     };
 
     let user = await this.userService.findUnique(auth.email);
+    const dto: CreateSignupOauthDto = {
+      name: auth.firstName + ' ' + auth.lastName,
+      email: auth.email,
+    };
 
     if (!user) {
-      user = await this.userRepository.createUserOauth(
-        auth.firstName,
-        auth.lastName,
-        auth.email,
-        auth.picture,
-      );
+      user = await this.userService.createOauth(dto);
 
-      await this.userRepository.verifyUser(user.email);
       const data = {
-        subject: 'Recapify validation',
-        username: user.username,
+        subject: 'BeatSync Inviation',
+        username: user.name,
       };
       await this.mailService.sendWelcomeEmail(user.email, data);
     }
 
-    const payload = { id: user.id, username: user.username, role: user.role };
+    const payload = { id: user.id, username: user.name, email: user.email };
     const token = await this.jwt.signAsync(payload);
 
     return {

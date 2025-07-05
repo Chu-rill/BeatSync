@@ -11,6 +11,14 @@ export const signup = z.object({
 
 export type CreateSignupDto = z.infer<typeof signup>;
 
+export const signupOauth = z.object({
+  name: z.string().min(1, { message: 'Username is required' }),
+  password: z.string().optional(),
+  email: z.string().email({ message: 'Invalid email format' }),
+});
+
+export type CreateSignupOauthDto = z.infer<typeof signupOauth>;
+
 // Login validator schema
 export const login = z.object({
   email: z.string().email({ message: 'Invalid email format' }),

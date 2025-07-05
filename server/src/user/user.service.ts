@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import {
   CreateLoginDto,
   CreateSignupDto,
+  CreateSignupOauthDto,
 } from 'src/auth/email-and-password-auth/validation';
 import { LoginResponse, SignUpResponse } from './user.response';
 import {
@@ -60,6 +61,17 @@ export class UserService {
         email: user.email,
       },
     };
+  }
+
+  async createOauth(dto: CreateSignupOauthDto): Promise<User> {
+    const newUser = new this.userModel({
+      name: dto.name,
+      email: dto.email,
+      password: '',
+    });
+    const user = await newUser.save();
+
+    return user;
   }
 
   async findAll(): Promise<User[]> {
