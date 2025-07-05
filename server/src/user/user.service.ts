@@ -8,7 +8,7 @@ import {
   CreateSignupDto,
   CreateSignupOauthDto,
 } from 'src/auth/email-and-password-auth/validation';
-import { LoginResponse, SignUpResponse } from './user.response';
+import { LoginResponse, UserResponse } from './user.response';
 import {
   comparePassword,
   encrypt,
@@ -24,7 +24,7 @@ export class UserService {
     private mailService: MailService,
   ) {}
 
-  async create(dto: CreateSignupDto): Promise<SignUpResponse> {
+  async create(dto: CreateSignupDto): Promise<UserResponse> {
     // Check if user already exists
     const existingUser = await this.findUnique({ email: dto.email });
     if (existingUser) {
@@ -76,6 +76,32 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+
+  async getUser(id: string): Promise<UserResponse> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mongoose = require('mongoose');
+    const objectId = new mongoose.Types.ObjectId(id);
+    const user = await this.userModel.findById(objectId).exec();
+    if (!user) {
+      return {
+        success: false,
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'User not found',
+        data: null,
+      };
+    }
+    return {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: 'User found',
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt?.toISOString(),
+      },
+    };
   }
 
   /**

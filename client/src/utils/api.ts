@@ -71,7 +71,7 @@ class ApiClient {
   }
 
   async getProfile(token: string): Promise<User> {
-    return this.request("/auth/profile", {
+    return this.request("/users", {
       headers: this.authHeaders(token),
     });
   }

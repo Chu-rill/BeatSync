@@ -4,7 +4,7 @@ export interface User {
   email?: string;
   createdAt?: string;
 }
-export interface SignUpResponse {
+export interface UserResponse {
   success: boolean;
   statusCode: number;
   message: string;
