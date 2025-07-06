@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import * as querystring from 'querystring';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class SpotifyAuthService {
@@ -14,6 +15,7 @@ export class SpotifyAuthService {
   private readonly clientSecret: string;
   private readonly redirectUri: string;
   private readonly frontendUrl: string;
+  private readonly userService: UserService;
 
   constructor(
     private readonly configService: ConfigService,

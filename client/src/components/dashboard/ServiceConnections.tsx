@@ -1,4 +1,3 @@
-import React from "react";
 import { Music, Youtube, Check, AlertCircle } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 

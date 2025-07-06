@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         try {
           setToken(storedTokens);
           const userData = await authApi.getProfile(storedTokens);
+          // console.log(userData);
           setUser(userData);
         } catch (error) {
           console.error("Failed to initialize auth:", error);
@@ -63,6 +64,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     const response = await authApi.login(email, password);
+    // console.log("Login response:", response);
     setToken(response.token);
     setUser(response.data);
     storeToken(response.token);
