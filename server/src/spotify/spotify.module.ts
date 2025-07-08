@@ -12,6 +12,7 @@ import { UserModule } from 'src/user/user.module';
       isGlobal: true,
     }),
     HttpModule,
+    UserModule,
   ],
   controllers: [SpotifyAuthController],
   providers: [SpotifyAuthService],

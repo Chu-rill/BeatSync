@@ -17,7 +17,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, username: string) => Promise<void>;
   logout: () => void;
-  connectSpotify: () => void;
+  connectSpotify: (userId: string) => void;
   connectGoogle: () => void;
   disconnectService: (service: "spotify" | "google") => Promise<void>;
 }
@@ -83,10 +83,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem("beatsync-tokens");
   };
 
-  const connectSpotify = () => {
-    window.location.href = `${
-      import.meta.env.VITE_API_BASE_URL || "http://localhost:8888/api/v1"
-    }/auth/spotify/login`;
+  const connectSpotify = (userId: string) => {
+    const baseUrl =
+      import.meta.env.VITE_API_BASE_URL || "http://localhost:8888/api/v1";
+    window.location.href = `${baseUrl}/auth/spotify/login`;
   };
 
   const connectGoogle = () => {

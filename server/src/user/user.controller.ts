@@ -27,6 +27,12 @@ export class UserController {
     return this.userService.getUser(id);
   }
 
+  @Post('connect')
+  async connectService(@Req() req: AuthRequest) {
+    const id = req.user.id;
+    return this.userService.updateConnectedService(id, 'spotify', true);
+  }
+
   // @Delete()
   // async remove(@Req() req: AuthRequest) {
   //   const userId = req.user.id;
