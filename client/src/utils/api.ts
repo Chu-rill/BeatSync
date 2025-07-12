@@ -76,6 +76,12 @@ class ApiClient {
     });
   }
 
+  async connectService(token: string): Promise<void> {
+    return this.request("/users/connect", {
+      headers: this.authHeaders(token),
+    });
+  }
+
   async disconnectService(service: string, token: string): Promise<void> {
     return this.request(`/auth/disconnect/${service}`, {
       method: "POST",

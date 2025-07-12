@@ -12,13 +12,7 @@ export const ServiceConnections = () => {
       color: "text-spotify-green",
       bgColor: "bg-green-50 dark:bg-green-900/20",
       borderColor: "border-green-200 dark:border-green-800",
-      connectAction: () => {
-        if (user?.id) {
-          connectSpotify(user.id);
-        } else {
-          console.error("User ID not available");
-        }
-      },
+      connectAction: connectSpotify,
       disconnectAction: () => disconnectService("spotify"),
     },
     {
