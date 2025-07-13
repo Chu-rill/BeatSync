@@ -20,7 +20,7 @@ import { MailService } from 'src/infra/mail/mail.service';
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwt: JwtService,
+    private readonly jwt: JwtService,
     private mailService: MailService,
   ) {}
 
@@ -155,7 +155,12 @@ export class UserService {
     const payload = {
       ...userWithoutPassword, // Spread the rest of the user properties
     };
-    const token = await this.jwt.signAsync(payload);
+
+    const token = await this.jwt.signAsync(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: '2h',
+    });
+
     return {
       success: true,
       statusCode: HttpStatus.OK,
