@@ -51,4 +51,50 @@ export class OauthService {
       token: token,
     };
   }
+
+  //YouTube Music Connect
+  async getGoogleConnectUrl(currentUser: any): Promise<string> {
+    const state = await this.jwt.signAsync(
+      { sub: currentUser.id },
+      { expiresIn: '10m' },
+    );
+
+    const baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+    const params = new URLSearchParams({
+      client_id: process.env.GOOGLE_CLIENT_ID || '',
+      redirect_uri: process.env.GOOGLE_CONNECT_REDIRECT_URI || '',
+      response_type: 'code',
+      scope: [
+        'openid',
+        'email',
+        'profile',
+        'https://www.googleapis.com/auth/youtube.readonly',
+      ].join(' '),
+      access_type: 'offline',
+      prompt: 'consent',
+      state: state || '',
+    });
+
+    return `${baseUrl}?${params.toString()}`;
+  }
+
+  // New: Handle the callback and update the user
+  async handleGoogleConnect(req, state: string) {
+    if (!req || !req.user) {
+      throw new UnauthorizedException('No user info from Google');
+    }
+
+    let payload: any;
+    try {
+      payload = this.jwt.verify(state);
+    } catch {
+      throw new UnauthorizedException('Invalid or expired state');
+    }
+
+    const userId = payload.sub;
+
+    // Optionally store tokens if available (req.user.tokens)
+
+    await this.userService.updateConnectedService(userId, 'google', true);
+  }
 }

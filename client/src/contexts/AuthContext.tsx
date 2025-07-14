@@ -93,9 +93,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const connectGoogle = () => {
+    const storedTokens = getToken();
+    const state = encodeURIComponent(storedTokens!);
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL || "http://localhost:8888/api/v1"
-    }/auth/google/login`;
+    }/oauth/google/login?state=${state}`;
   };
 
   const disconnectService = async (service: "spotify" | "google") => {
