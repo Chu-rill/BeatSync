@@ -19,7 +19,6 @@ interface AuthContextType {
   logout: () => void;
   connectSpotify: () => void;
   connectGoogle: () => void;
-  handleSpotifyCallback: () => Promise<void>;
   disconnectService: (service: "spotify" | "google") => Promise<void>;
 }
 
@@ -85,24 +84,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const connectSpotify = () => {
-    // const storedTokens = getToken();
+    const storedTokens = getToken();
     const baseUrl =
       import.meta.env.VITE_API_BASE_URL || "http://localhost:8888/api/v1";
-    window.location.href = `${baseUrl}/auth/spotify/login`;
-  };
 
-  const handleSpotifyCallback = async () => {
-    const storedTokens = getToken();
-    if (storedTokens) {
-      try {
-        await authApi.connectService(storedTokens);
-        // Refresh user data to show updated connection status
-        const updatedUser = await authApi.getProfile(storedTokens);
-        setUser(updatedUser);
-      } catch (error) {
-        console.error("Failed to connect Spotify service:", error);
-      }
-    }
+    const state = encodeURIComponent(storedTokens!);
+    window.location.href = `${baseUrl}/auth/spotify/login?state=${state}`;
   };
 
   const connectGoogle = () => {
@@ -131,7 +118,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         connectSpotify,
         connectGoogle,
         disconnectService,
-        handleSpotifyCallback,
       }}
     >
       {children}

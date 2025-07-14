@@ -25,10 +25,9 @@ export class SpotifyAuthController {
   ) {}
 
   @Get('login')
-  login(@Req() req, @Res() res: Response): void {
+  login(@Query('state') state: string, @Res() res: Response): void {
     try {
-      const user = req.user;
-      const authUrl = this.spotifyAuthService.getAuthorizationUrl(user.id);
+      const authUrl = this.spotifyAuthService.getAuthorizationUrl(state);
       res.redirect(authUrl);
     } catch (error) {
       this.logger.error('Login error:', error);
@@ -43,20 +42,15 @@ export class SpotifyAuthController {
     @Res() res: Response,
   ): Promise<void> {
     try {
-      if (!code) {
+      if (!code)
         throw new BadRequestException('No authorization code provided');
-      }
+      if (!state) throw new UnauthorizedException('Missing OAuth state');
 
-      if (!state) {
-        throw new UnauthorizedException('Missing OAuth state');
-      }
-      let payload: any;
-      try {
-        payload = this.jwtService.verify(state);
-      } catch (err) {
-        throw new UnauthorizedException('Invalid or expired state');
-      }
-      const userId = payload.userId;
+      // Here, verify the JWT token you sent from frontend
+      const decoded = this.jwtService.decode(state);
+      console.log(`Decoded token:`, decoded);
+      const payload = this.jwtService.verify(state);
+      const userId = payload.id; // or whatever field your token includes
 
       // Exchange code for token
       const accessToken =

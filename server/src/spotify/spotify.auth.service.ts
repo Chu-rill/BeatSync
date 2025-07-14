@@ -28,10 +28,7 @@ export class SpotifyAuthService {
       'SPOTIFY_CLIENT_SECRET',
     )!;
     this.redirectUri = this.configService.get<string>('SPOTIFY_REDIRECT_URI')!;
-    this.frontendUrl = this.configService.get<string>(
-      'FRONTEND_URL',
-      'http://localhost:3000/playlist',
-    );
+    this.frontendUrl = this.configService.get<string>('SPOTIFY_FRONTEND_URL')!;
 
     // Validate required environment variables
     if (!this.clientId || !this.clientSecret || !this.redirectUri) {
@@ -39,7 +36,7 @@ export class SpotifyAuthService {
     }
   }
 
-  getAuthorizationUrl(userId: string): string {
+  getAuthorizationUrl(state: string): string {
     const scopes = [
       'user-read-private',
       'user-read-email',
@@ -49,10 +46,7 @@ export class SpotifyAuthService {
       'playlist-modify-public',
       'playlist-modify-private',
     ].join(' ');
-    const state = this.jwt.sign(
-      { userId },
-      { expiresIn: '10m' }, // expires in 10 min
-    );
+
     const params = querystring.stringify({
       response_type: 'code',
       client_id: this.clientId,
