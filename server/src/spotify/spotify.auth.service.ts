@@ -8,6 +8,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import * as querystring from 'querystring';
 import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class SpotifyAuthService {
@@ -16,6 +17,7 @@ export class SpotifyAuthService {
   private readonly redirectUri: string;
   private readonly frontendUrl: string;
   private readonly userService: UserService;
+  private readonly jwt: JwtService;
 
   constructor(
     private readonly configService: ConfigService,
@@ -37,7 +39,7 @@ export class SpotifyAuthService {
     }
   }
 
-  getAuthorizationUrl(): string {
+  getAuthorizationUrl(userId: string): string {
     const scopes = [
       'user-read-private',
       'user-read-email',
@@ -47,12 +49,16 @@ export class SpotifyAuthService {
       'playlist-modify-public',
       'playlist-modify-private',
     ].join(' ');
-
+    const state = this.jwt.sign(
+      { userId },
+      { expiresIn: '10m' }, // expires in 10 min
+    );
     const params = querystring.stringify({
       response_type: 'code',
       client_id: this.clientId,
       scope: scopes,
       redirect_uri: this.redirectUri,
+      state,
     });
 
     return `https://accounts.spotify.com/authorize?${params}`;
@@ -112,5 +118,22 @@ export class SpotifyAuthService {
 
   getFrontendRedirectUrl(accessToken: string): string {
     return `${this.frontendUrl}?access_token=${accessToken}`;
+  }
+
+  async getSpotifyProfile(accessToken: string): Promise<any> {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get('https://api.spotify.com/v1/me', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Failed to fetch Spotify profile:',
+        error.response?.data || error.message,
+      );
+      throw new InternalServerErrorException('Could not fetch Spotify profile');
+    }
   }
 }

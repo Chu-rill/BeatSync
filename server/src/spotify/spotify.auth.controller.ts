@@ -25,9 +25,10 @@ export class SpotifyAuthController {
   ) {}
 
   @Get('login')
-  login(@Res() res: Response): void {
+  login(@Req() req, @Res() res: Response): void {
     try {
-      const authUrl = this.spotifyAuthService.getAuthorizationUrl();
+      const user = req.user;
+      const authUrl = this.spotifyAuthService.getAuthorizationUrl(user.id);
       res.redirect(authUrl);
     } catch (error) {
       this.logger.error('Login error:', error);
@@ -38,7 +39,7 @@ export class SpotifyAuthController {
   @Get('callback')
   async callback(
     @Query('code') code: string,
-    @Req() req,
+    @Query('state') state: string,
     @Res() res: Response,
   ): Promise<void> {
     try {
@@ -46,21 +47,36 @@ export class SpotifyAuthController {
         throw new BadRequestException('No authorization code provided');
       }
 
-      // 1. Exchange code for token
+      if (!state) {
+        throw new UnauthorizedException('Missing OAuth state');
+      }
+      let payload: any;
+      try {
+        payload = this.jwtService.verify(state);
+      } catch (err) {
+        throw new UnauthorizedException('Invalid or expired state');
+      }
+      const userId = payload.userId;
+
+      // Exchange code for token
       const accessToken =
         await this.spotifyAuthService.exchangeCodeForToken(code);
 
-      // 2. Extract user ID from JWT (assume JWT is in cookie or header)
-      const jwt =
-        req.cookies['jwt'] || req.headers['authorization']?.split(' ')[1];
-      if (!jwt) throw new UnauthorizedException('No JWT found');
-      const payload = this.jwtService.verify(jwt);
-      const userId = payload.id;
+      // Fetch Spotify profile (optional)
+      //    const profile =
+      //  await this.spotifyAuthService.getSpotifyProfile(accessToken);
 
-      // 3. Update user's connected services
+      // Update your user record
       await this.userService.updateConnectedService(userId, 'spotify', true);
 
-      // 4. Redirect to frontend
+      // Store tokens if you want
+      // await this.userService.updateSpotifyTokens(
+      //    userId,
+      //   accessToken,
+      //   refreshToken,
+      //  );
+
+      // Redirect to frontend
       const redirectUrl =
         this.spotifyAuthService.getFrontendRedirectUrl(accessToken);
       res.redirect(redirectUrl);
